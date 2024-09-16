@@ -1,10 +1,6 @@
 name: Build and release slides
 
-on:
-  release:
-    types:
-      - published
-      - edited
+on: push
 
 jobs:
   build-release:
@@ -16,13 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.tag_name }}
       - name: Build
         run: |
           make -C slides LATEXMK=latexmk
-          cp slides/slides.pdf slides-${{ github.event.release.tag_name }}.pdf
+          cp slides/slides.pdf slides.pdf
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: slides-${{ github.event.release.tag_name }}.pdf
+          files: slides.pdf
+          draft: true
