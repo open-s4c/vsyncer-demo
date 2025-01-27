@@ -1,4 +1,5 @@
-CFLAGS  = -Ilocal/include -O0 -g -Wall -Werror
+CFLAGS  = -Ilocal/include -O0 -g -Wall -Werror -lpthread
+#CFLAGS += -DSET_CPU_AFFINITY
 HEADERS = $(wildcard src/*.h)
 CC     ?= gcc
 

@@ -56,7 +56,7 @@ rm -f $temp $output
 # calculate expected MD5 sum
 if [[ "$(uname -s)" = Darwin* ]] \
 || [[ "$(uname -s)" = *BSD* ]]  then
-    is_mac=true
+    use_md5=true
     expected=$(md5 -q "$fn")
 else
     expected=$(md5sum "$fn" | cut -d" " -f1)
@@ -66,17 +66,18 @@ time while [ "$i" -lt "$nit" ]; do
     i=$(echo "$i + 1" | bc)
 
     # run test program
+    echo "run $i"
     $catprog $fn > $temp
 
     # compare sum and stop script if they differ
-    if [ "${is_mac}" = true ]; then
+    if [ "${use_md5}" = true ]; then
         sum=$(md5 -q "$temp")
     else
         sum=$(md5sum "$temp" | cut -d" " -f1)
     fi
     if [ true ] && [ "$sum" != "$expected" ]; then
         if (which convert && which viu) > /dev/null; then
-            convert $fn $temp +append $output
+            convert $fn $temp +append $output 2> /dev/null
             viu $output
         fi
         echo "Incorrect md5sum @ run $i"
