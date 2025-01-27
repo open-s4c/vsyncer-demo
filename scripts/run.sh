@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ------------------------------------------------------------------------------
 # Run test program until input and output differ. Input is a figure.
 #
@@ -21,7 +21,7 @@ fi
 nit=$2 # maximum number of iterations
 if [ -z "$nit" ]; then
     nit=100
-elif ([ "$nit" -gt 0 ] && [ "$nit" -le 1000 ]) 2> /dev/null; then
+elif ([ "$nit" -gt 0 ] && [ "$nit" -le 10000 ]) 2> /dev/null; then
     : # valid value
 else
     echo "$nit is not a valid number in range = (0;1000]"
@@ -41,7 +41,7 @@ if [ "$ext" == "jpeg/jpg/jpe/jfif" ]; then
     ext="jpg"
 fi
 
-# u"se the same extension for the output and temp files
+# use the same extension for the output and temp files
 output="output.$ext"
 temp="temp.$ext"
 
@@ -54,7 +54,8 @@ fi
 rm -f $temp $output
 
 # calculate expected MD5 sum
-if [[ "$(uname -s)" = Darwin* ]]; then
+if [[ "$(uname -s)" = Darwin* ]] \
+|| [[ "$(uname -s)" = *BSD* ]]  then
     is_mac=true
     expected=$(md5 -q "$fn")
 else
